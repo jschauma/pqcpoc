@@ -1,0 +1,22 @@
+# Trivial systemd config for pqcpoc
+#
+# Place in /etc/systemd/system, then run
+# sudo systemctl enable pqcpoc
+# sudo systemctl start pqcpoc
+# 
+[Unit]
+Description=PQC PoC
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/pqcpoc
+ExecStart=/opt/pqcpoc/bin/java-bc
+Restart=on-failure
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=pqcpoc
+
+[Install]
+WantedBy=multi-user.target

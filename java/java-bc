@@ -1,0 +1,11 @@
+#! /bin/sh
+PREFIX=/opt/pqcpoc
+
+CLASSPATH=/opt/bouncycastle/*:/opt/pqcpoc/java/.
+
+/opt/jdk-24.0.1/bin/java -cp "${CLASSPATH}" PQTlsServer \
+	-c ${PREFIX}/etc/cert.pem			\
+	-k ${PREFIX}/etc/key.pem			\
+	-l ${PREFIX}/log/pqcpoc.log			\
+	-o
+
