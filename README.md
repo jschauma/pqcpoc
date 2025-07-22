@@ -35,6 +35,7 @@ Sample PoC endpoints that I've currently set up are:
 * https://java-bc.pqc.dotwtf.wtf
 * https://openssl-nginx.pqc.dotwtf.wtf
 * https://openssl-oqs-apache.pqc.dotwtf.wtf
+* https://wolfssl-nginx.pqc.dotwtf.wtf
 
 See [this blog post](https://www.netmeister.org/blog/pqc-pocs.html) for more information.
 
