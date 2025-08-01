@@ -19,6 +19,7 @@ file_put_contents($LOGFILE, date("c") . " " .
 <html lang="en">
   <head>
     <meta http-equiv="content-type" content= "text/html; charset=utf-8">
+    <link rel="icon" href="data:,">
     <title>PQC PoC</title>
   </head>
   <body>

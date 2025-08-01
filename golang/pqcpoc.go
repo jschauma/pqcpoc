@@ -176,10 +176,11 @@ func handler(w http.ResponseWriter, r *http.Request) {
     <p>
       Also available:
       <ul>
+        <li><a href="https://boringssl-nginx.pqc.dotwtf.wtf">https://boringssl-nginx.pqc.dotwtf.wtf</a></li>
         <li><a href="https://java-bc.pqc.dotwtf.wtf">https://java-bc.pqc.dotwtf.wtf</a></li>
         <li><a href="https://openssl-nginx.pqc.dotwtf.wtf">https://openssl-nginx.pqc.dotwtf.wtf</a></li>
         <li><a href="https://openssl-oqs-apache.pqc.dotwtf.wtf">https://openssl-oqs-apache.pqc.dotwtf.wtf</a></li>
-        <li><a href="https://boringssl-nginx.pqc.dotwtf.wtf">https://boringssl-nginx.pqc.dotwtf.wtf</a></li>
+        <li><a href="https://wolfssl-nginx.pqc.dotwtf.wtf">https://wolfssl-nginx.pqc.dotwtf.wtf</a></li>
       </ul>
     </p>
     <hr class="noshade" style="width:100%%;">
