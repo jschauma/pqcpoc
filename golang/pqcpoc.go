@@ -22,7 +22,6 @@ import (
 	"net"
 	"net/http"
 	"os"
-	"strconv"
 	"strings"
 	"sync"
 
@@ -80,34 +79,6 @@ func GetConnInfo(r *http.Request) (tls.ConnectionState, bool) {
 	return tls.ConnectionState{}, false
 }
 
-/* This is fugly.  https://golang.google.cn/src/crypto/tls/common.go has
- * CurveID unexported as 'testingOnlyCurveID', so we extract it the stupid
- * way.  This will break as soon as Go changes the private members.
- *
- * Go 1.25 will expose the CurveId in the ConnectionState:
- * https://github.com/golang/go/commit/6bd5741a4c600ee9a48dfa5244f0c4116b718404
- */
-func getNamedGroup(tlsInfo tls.ConnectionState) (curve string) {
-	s := fmt.Sprintf("%v", tlsInfo)
-	fields := strings.Split(s, " ")
-	last := strings.TrimRight(fields[len(fields)-1], "}")
-
-	curve = curves[last]
-
-	return
-}
-
-/* As above... */
-func wasHRR(tlsInfo tls.ConnectionState) (hrr bool) {
-	s := fmt.Sprintf("%v", tlsInfo)
-	fields := strings.Split(s, " ")
-	wasHRR := strings.TrimRight(fields[len(fields)-2], "}")
-
-	hrr, _ = strconv.ParseBool(wasHRR)
-
-	return
-}
-
 func handler(w http.ResponseWriter, r *http.Request) {
 	for name, values := range r.Header {
 		if strings.EqualFold(name, "origin") {
@@ -121,7 +92,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	w.Header().Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
-        w.Header().Set("Alt-Svc", fmt.Sprintf("h3=\":%d\",h2=\":%d\"", HTTPS_PORT, HTTPS_PORT))
+	w.Header().Set("Alt-Svc", fmt.Sprintf("h3=\":%d\",h2=\":%d\"", HTTPS_PORT, HTTPS_PORT))
 
 	tlsInfo, ok := GetConnInfo(r)
 	if !ok {
@@ -131,8 +102,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	tlsVersion := tls.VersionName(tlsInfo.Version)
 	tlsCipher := tls.CipherSuiteName(tlsInfo.CipherSuite)
-	tlsNamedGroup := getNamedGroup(tlsInfo)
-	tlsHRR := wasHRR(tlsInfo)
+	tlsNamedGroup := tlsInfo.CurveID
+	tlsHRR := tlsInfo.HelloRetryRequest
 
 	log.Printf("%s \"%s %s %s\" - %s %s %s",
 		r.RemoteAddr,
@@ -279,9 +250,11 @@ func main() {
 	}
 
 	var eg errgroup.Group
+
 	eg.Go(func() error {
 		return tcpServer.ListenAndServeTLS(CERT, KEY)
 	})
+
 	eg.Go(func() error {
 		return h3server.ListenAndServeTLS(CERT, KEY)
 	})

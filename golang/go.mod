@@ -1,6 +1,6 @@
 module akamai.com/pqcpoc
 
-go 1.24.2
+go 1.26
 
 require (
 	github.com/quic-go/quic-go v0.52.0
